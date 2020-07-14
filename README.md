@@ -1,9 +1,7 @@
-# String Template 
+# Simple Html Template 
 
-[![version](https://img.shields.io/crates/v/simple-html-template?label=version)](https://crates.io/crates/simple-html-template)
-[![license](https://img.shields.io/crates/l/simple-html-template?label=license)](https://crates.io/crates/simple-html-template)
-[![downloads](https://img.shields.io/crates/d/simple-html-template?label=downloads)](https://crates.io/crates/simple-html-template)
-[![chat](https://img.shields.io/matrix/users:typ3.tech)](https://matrix.to/#/#users:typ3.tech)
+[![Crates.io](https://img.shields.io/crates/v/simple-html-template)](https://crates.io/crates/shipyard)
+[![Documentation](https://docs.rs/simple-html-template/badge.svg)](https://docs.rs/simple-html-template)
 
 This is essentially a fork of [far](https://crates.io/crates/far), with a cache for re-use and an optional macro (enabled by default) to make safe html variables.
 

@@ -35,8 +35,8 @@ macro_rules! html_map_strong(
 
 pub struct Template<'a> {
     // Stores (key, (key_start, key_end))
-    replaces: Vec<(&'a str, (usize, usize))>,
-    template_str:&'a str,
+    pub replaces: Vec<(&'a str, (usize, usize))>,
+    pub template_str:&'a str,
 }
 
 

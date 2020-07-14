@@ -1,0 +1,20 @@
+[package]
+name = "simple-html-template"
+description = "String Template"
+version = "0.1.0"
+authors = ["David Komer <david.komer@gmail.com>"]
+edition = "2018"
+documentation = "https://docs.rs/simple-html-template"
+homepage = "https://github.com/dakom/simple-html-template"
+repository = "https://github.com/dakom/simple-html-template"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+keywords = ["string", "template", "templating", "engine"]
+categories = ["template-engine"]
+
+[dependencies]
+htmlescape = {version = "^0.3", optional = true}
+
+[features]
+default = ["html"]
+html = ["htmlescape"]

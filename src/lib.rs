@@ -19,7 +19,7 @@ macro_rules! html_map(
         {
             let mut m = ::std::collections::HashMap::new();
             $(
-                m.insert($key, ::htmlescape::encode_minimal($value));
+                m.insert($key, htmlescape::encode_minimal($value));
             )+
             m
         }
@@ -33,7 +33,7 @@ macro_rules! html_map_strong(
         {
             let mut m = ::std::collections::HashMap::new();
             $(
-                m.insert($key, ::htmlescape::encode_attribute($value));
+                m.insert($key, htmlescape::encode_attribute($value));
             )+
             m
         }

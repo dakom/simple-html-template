@@ -14,7 +14,7 @@ pub use errors::{Error, Errors};
 
 #[macro_export]
 macro_rules! html_map(
-    { $($key:expr => $value:expr),+ } => {
+    { $($key:expr => $value:expr),* $(,)? } => {
         {
             let mut m = ::std::collections::HashMap::new();
             $(
@@ -27,7 +27,7 @@ macro_rules! html_map(
 
 #[macro_export]
 macro_rules! html_map_strong(
-    { $($key:expr => $value:expr),+ } => {
+    { $($key:expr => $value:expr),* $(,)? } => {
         {
             let mut m = ::std::collections::HashMap::new();
             $(

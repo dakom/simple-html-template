@@ -4,7 +4,7 @@ use crate::*;
 fn html_string() {
     let args = html_map! {
         0 => "Cat",
-        1 => "<b>Cat</b>"
+        1 => "<b>Cat</b>",
     };
 
     

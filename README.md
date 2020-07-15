@@ -5,16 +5,14 @@
 
 This is essentially a fork of [far](https://crates.io/crates/far), with some additions:
   * a cache for re-use, as well as a higher-level cache for lookup by name
-  * (optional, enabled by default) macro to make safe html variables.
+  * macro to make safe html variables.
   * (optional, disabled by default) helpers to work with the DOM in a wasm context 
 
-The `html_map!` macro uses the minimal set of escapes (as per [The XSS cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)). If you need to have stronger guarantees, i.e. for sending data for attributes, then use `html_map_strong!` or build the hashmap the usual way and wrap the values with htmlescape::encode_attribute().
+The `html_map!` and `html_map_strong!` macros use the [htmlescape](https://crates.io/crates/htmlescape) crate, which you must add as a dependency (or else compilation will fail when calling these macros)
 
 Note that, like `far`, this crate does not deal with escaping the keys or replacements in any way. e.g. if for some reason you need the template to have a `${}` literal.
 
 The value of the HashMap which is passed to Template::render() must be `AsRef<str>`
-
-The only dependency is the optional `htmlescape`
 
 Examples:
 

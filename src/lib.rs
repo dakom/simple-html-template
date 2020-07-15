@@ -12,7 +12,6 @@ use web_sys::{Document, DocumentFragment, HtmlTemplateElement};
 
 pub use errors::{Error, Errors};
 
-#[cfg(feature = "html")]
 #[macro_export]
 macro_rules! html_map(
     { $($key:expr => $value:expr),+ } => {
@@ -26,7 +25,6 @@ macro_rules! html_map(
      };
 );
 
-#[cfg(feature = "html")]
 #[macro_export]
 macro_rules! html_map_strong(
     { $($key:expr => $value:expr),+ } => {

@@ -3,7 +3,10 @@
 [![Crates.io](https://img.shields.io/crates/v/simple-html-template)](https://crates.io/crates/shipyard)
 [![Documentation](https://docs.rs/simple-html-template/badge.svg)](https://docs.rs/simple-html-template)
 
-This is essentially a fork of [far](https://crates.io/crates/far), with a cache for re-use and an optional macro (enabled by default) to make safe html variables.
+This is essentially a fork of [far](https://crates.io/crates/far), with some additions:
+  * a cache for re-use, as well as a higher-level cache for lookup by name
+  * (optional, enabled by default) macro to make safe html variables.
+  * (optional, disabled by default) helpers to work with the DOM in a wasm context 
 
 The `html_map!` macro uses the minimal set of escapes (as per [The XSS cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)). If you need to have stronger guarantees, i.e. for sending data for attributes, then use `html_map_strong!` or build the hashmap the usual way and wrap the values with htmlescape::encode_attribute().
 

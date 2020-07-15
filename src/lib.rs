@@ -3,6 +3,13 @@ mod errors;
 #[cfg(test)]
 mod tests;
 
+#[cfg(feature = "wasm")]
+use wasm_bindgen::prelude::*;
+#[cfg(feature = "wasm")]
+use wasm_bindgen::JsCast;
+#[cfg(feature = "wasm")]
+use web_sys::{Document, DocumentFragment, HtmlTemplateElement};
+
 pub use errors::{Error, Errors};
 
 #[cfg(feature = "html")]
@@ -138,5 +145,73 @@ impl <'a> Template <'a> {
         assert_eq!(output.len(), final_len);
 
         Ok(output)
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_dom<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
+        let html = self.render(data)?;
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().dyn_into().unwrap_throw();
+        el.set_inner_html(&html);
+        Ok(el.content())
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_dom_plain(&self, doc:&Document) -> DocumentFragment {
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().dyn_into().unwrap_throw();
+        el.set_inner_html(&self.template_str);
+        el.content()
+    }
+}
+
+/// render functions panic if the template name doesn't exist
+pub struct TemplateCache {
+    templates: HashMap<&'static str, Template<'static>>,
+    #[cfg(feature = "wasm")]
+    doc: Document,
+}
+
+impl TemplateCache {
+
+    pub fn new(templates:&[(&'static str, &'static str)]) -> Self{
+        let mut _templates = HashMap::new();
+
+        for (name, data) in templates {
+            _templates.insert(*name, Template::new(data).unwrap());
+        }
+
+        Self::_new(_templates)
+    }
+
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "wasm")] {
+            fn _new(_templates:HashMap<&'static str, Template<'static>>) -> Self {
+                let window = web_sys::window().unwrap_throw();
+                let doc = window.document().unwrap_throw();
+
+                Self { templates: _templates, doc }
+            }
+        } else {
+            fn _new(_templates:HashMap<&'static str, Template<'static>>) -> Self {
+                Self {templates: _templates }
+            }
+        }
+    }
+
+    pub fn render<V: AsRef<str>>(&self, name:&str, data:&HashMap<&str,V>) -> Result<String, Errors> {
+        self.templates.get(name).unwrap().render(data)
+    }
+
+    pub fn render_plain(&self, name:&str) -> &str {
+        self.templates.get(name).unwrap().template_str
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_dom<V: AsRef<str>>(&self, name:&str, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
+        self.templates.get(name).unwrap_throw().render_dom(&self.doc, data)
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_dom_plain(&self, name:&str) -> DocumentFragment {
+        self.templates.get(name).unwrap_throw().render_dom_plain(&self.doc)
     }
 }

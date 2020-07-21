@@ -38,7 +38,7 @@ pub fn render_template_strong(template_str:String, lookup:JsValue) -> String {
 /// unwraps errors
 #[wasm_bindgen]
 pub fn render_template_unsafe(template_str:String, lookup:JsValue) -> String {
-    let mut lookup:HashMap<String,String> = serde_wasm_bindgen::from_value(lookup).unwrap();
+    let lookup:HashMap<String,String> = serde_wasm_bindgen::from_value(lookup).unwrap();
     _render_template(template_str, lookup)
 }
 

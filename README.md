@@ -2,7 +2,6 @@
 
 [![Crates.io](https://img.shields.io/crates/v/simple-html-template)](https://crates.io/crates/shipyard)
 [![Documentation](https://docs.rs/simple-html-template/badge.svg)](https://docs.rs/simple-html-template)
-[![npm](https://img.shields.io/npm/v/simple-html-template-wasm)](https://www.npmjs.com/package/simple-html-template-wasm)
 
 This is essentially a fork of [far](https://crates.io/crates/far), with some additions:
   * a cache for re-use, as well as a higher-level cache for lookup by name

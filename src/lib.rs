@@ -13,6 +13,19 @@ use web_sys::{Document, DocumentFragment, HtmlTemplateElement};
 pub use errors::{Error, Errors};
 
 #[macro_export]
+macro_rules! hash_map(
+    { $($key:expr => $value:expr),* $(,)? } => {
+        {
+            let mut m = ::std::collections::HashMap::new();
+            $(
+                m.insert($key, $value);
+            )+
+            m
+        }
+     };
+);
+
+#[macro_export]
 macro_rules! html_map(
     { $($key:expr => $value:expr),* $(,)? } => {
         {
@@ -162,15 +175,15 @@ impl <'a> Template <'a> {
 }
 
 /// render functions panic if the template name doesn't exist
-pub struct TemplateCache {
-    templates: HashMap<&'static str, Template<'static>>,
+pub struct TemplateCache <'a> {
+    templates: HashMap<&'a str, Template<'a>>,
     #[cfg(feature = "wasm")]
     doc: Document,
 }
 
-impl TemplateCache {
+impl <'a> TemplateCache <'a> {
 
-    pub fn new(templates:&[(&'static str, &'static str)]) -> Self{
+    pub fn new(templates:&[(&'a str, &'a str)]) -> Self{
         let mut _templates = HashMap::new();
 
         for (name, data) in templates {
@@ -182,14 +195,14 @@ impl TemplateCache {
 
     cfg_if::cfg_if! {
         if #[cfg(feature = "wasm")] {
-            fn _new(_templates:HashMap<&'static str, Template<'static>>) -> Self {
+            fn _new(_templates:HashMap<&'a str, Template<'a>>) -> Self {
                 let window = web_sys::window().unwrap_throw();
                 let doc = window.document().unwrap_throw();
 
                 Self { templates: _templates, doc }
             }
         } else {
-            fn _new(_templates:HashMap<&'static str, Template<'static>>) -> Self {
+            fn _new(_templates:HashMap<&'a str, Template<'a>>) -> Self {
                 Self {templates: _templates }
             }
         }

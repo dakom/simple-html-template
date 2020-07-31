@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 #[cfg(feature = "wasm")]
 use wasm_bindgen::JsCast;
 #[cfg(feature = "wasm")]
-use web_sys::{Document, DocumentFragment, HtmlTemplateElement};
+use web_sys::{Document, DocumentFragment, HtmlTemplateElement, HtmlElement};
 
 pub use errors::{Error, Errors};
 
@@ -159,26 +159,41 @@ impl <'a> Template <'a> {
     }
 
     #[cfg(feature = "wasm")]
-    pub fn render_dom<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
+    pub fn render_fragment<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
         let html = self.render(data)?;
-        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().dyn_into().unwrap_throw();
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into().unwrap_throw();
         el.set_inner_html(&html);
         Ok(el.content())
     }
 
     #[cfg(feature = "wasm")]
-    pub fn render_dom_plain(&self, doc:&Document) -> DocumentFragment {
-        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().dyn_into().unwrap_throw();
+    pub fn render_fragment_plain(&self, doc:&Document) -> DocumentFragment {
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into().unwrap_throw();
         el.set_inner_html(&self.template_str);
         el.content()
     }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_elem<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<HtmlElement, Errors> {
+        self.render_fragment(doc, data)
+            .map(|frag| {
+                frag.first_child().unwrap().unchecked_into()
+            })
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_elem_plain(&self, doc:&Document) -> HtmlElement {
+        let frag = self.render_fragment_plain(doc);
+        frag.first_child().unwrap_throw().unchecked_into()
+    }
 }
+
 
 /// render functions panic if the template name doesn't exist
 pub struct TemplateCache <'a> {
-    templates: HashMap<&'a str, Template<'a>>,
+    pub templates: HashMap<&'a str, Template<'a>>,
     #[cfg(feature = "wasm")]
-    doc: Document,
+    pub doc: Document,
 }
 
 impl <'a> TemplateCache <'a> {
@@ -217,12 +232,22 @@ impl <'a> TemplateCache <'a> {
     }
 
     #[cfg(feature = "wasm")]
-    pub fn render_dom<V: AsRef<str>>(&self, name:&str, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
-        self.templates.get(name).unwrap_throw().render_dom(&self.doc, data)
+    pub fn render_fragment<V: AsRef<str>>(&self, name:&str, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
+        self.templates.get(name).unwrap_throw().render_fragment(&self.doc, data)
     }
 
     #[cfg(feature = "wasm")]
-    pub fn render_dom_plain(&self, name:&str) -> DocumentFragment {
-        self.templates.get(name).unwrap_throw().render_dom_plain(&self.doc)
+    pub fn render_fragment_plain(&self, name:&str) -> DocumentFragment {
+        self.templates.get(name).unwrap_throw().render_fragment_plain(&self.doc)
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_elem<V: AsRef<str>>(&self, name:&str, data:&HashMap<&str, V>) -> Result<HtmlElement, Errors> {
+        self.templates.get(name).unwrap_throw().render_elem(&self.doc, data)
+    }
+
+    #[cfg(feature = "wasm")]
+    pub fn render_elem_plain(&self, name:&str) -> HtmlElement {
+        self.templates.get(name).unwrap_throw().render_elem_plain(&self.doc);
     }
 }

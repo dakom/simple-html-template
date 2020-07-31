@@ -161,14 +161,14 @@ impl <'a> Template <'a> {
     #[cfg(feature = "wasm")]
     pub fn render_fragment<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {
         let html = self.render(data)?;
-        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into().unwrap_throw();
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into();
         el.set_inner_html(&html);
         Ok(el.content())
     }
 
     #[cfg(feature = "wasm")]
     pub fn render_fragment_plain(&self, doc:&Document) -> DocumentFragment {
-        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into().unwrap_throw();
+        let el: HtmlTemplateElement = doc.create_element("template").unwrap_throw().unchecked_into();
         el.set_inner_html(&self.template_str);
         el.content()
     }

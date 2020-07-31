@@ -248,6 +248,6 @@ impl <'a> TemplateCache <'a> {
 
     #[cfg(feature = "wasm")]
     pub fn render_elem_plain(&self, name:&str) -> HtmlElement {
-        self.templates.get(name).unwrap_throw().render_elem_plain(&self.doc);
+        self.templates.get(name).unwrap_throw().render_elem_plain(&self.doc)
     }
 }

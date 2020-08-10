@@ -1,6 +1,6 @@
 # Simple Html Template 
 
-[![Crates.io](https://img.shields.io/crates/v/simple-html-template)](https://crates.io/crates/shipyard)
+[![Crates.io](https://img.shields.io/crates/v/simple-html-template)](https://crates.io/crates/simple-html-template)
 [![Documentation](https://docs.rs/simple-html-template/badge.svg)](https://docs.rs/simple-html-template)
 
 This is essentially a fork of [far](https://crates.io/crates/far), with some additions:

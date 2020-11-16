@@ -60,6 +60,7 @@ pub struct Template<'a> {
 
 impl <'a> Template <'a> {
     pub fn new (template_str: &'a str) -> Result<Self, Error> {
+        let template_str = template_str.trim();
         let mut template = Self { replaces: Vec::new(), template_str };
 
         let replaces = &mut template.replaces;
@@ -157,6 +158,11 @@ impl <'a> Template <'a> {
 
         Ok(output)
     }
+    
+    pub fn render_plain(&self) -> &str {
+        self.template_str 
+    }
+
 
     #[cfg(feature = "wasm")]
     pub fn render_fragment<V: AsRef<str>>(&self, doc:&Document, data:&HashMap<&str, V>) -> Result<DocumentFragment, Errors> {

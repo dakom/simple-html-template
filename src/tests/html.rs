@@ -1,6 +1,14 @@
 use crate::*;
 
 #[test]
+fn whitespace() {
+    let t = Template::new(" <div>hello world</div> ").unwrap();
+    let s = t.render_plain();
+
+    assert_eq!(s, "<div>hello world</div>");
+}
+
+#[test]
 fn html_string() {
     let args = html_map! {
         0 => "Cat",
